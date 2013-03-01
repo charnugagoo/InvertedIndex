@@ -10,6 +10,7 @@
 		8D4D150216DEDC9400CDD51E /* parser.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8D4D150116DEDC9400CDD51E /* parser.1 */; };
 		8D4D152416DEEFD700CDD51E /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D4D152316DEEFD700CDD51E /* parser.cpp */; };
 		8DDFECE116E11D410041AF4E /* parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8DDFECE016E11D410041AF4E /* parse.cpp */; };
+		8DDFEEEA16E160310041AF4E /* BuildIndex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8DDFEEE916E160310041AF4E /* BuildIndex.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,7 @@
 		8D4D152316DEEFD700CDD51E /* parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
 		8D4D152516DEF02E00CDD51E /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
 		8DDFECE016E11D410041AF4E /* parse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parse.cpp; sourceTree = "<group>"; };
+		8DDFEEE916E160310041AF4E /* BuildIndex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BuildIndex.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 		8D4D14F316DEDC9400CDD51E = {
 			isa = PBXGroup;
 			children = (
+				8DDFEEE916E160310041AF4E /* BuildIndex.cpp */,
 				8DDFECE016E11D410041AF4E /* parse.cpp */,
 				8D4D14FE16DEDC9400CDD51E /* parser */,
 				8D4D14FD16DEDC9400CDD51E /* Products */,
@@ -134,6 +137,7 @@
 			files = (
 				8D4D152416DEEFD700CDD51E /* parser.cpp in Sources */,
 				8DDFECE116E11D410041AF4E /* parse.cpp in Sources */,
+				8DDFEEEA16E160310041AF4E /* BuildIndex.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
