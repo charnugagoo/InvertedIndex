@@ -5,7 +5,6 @@
 #include <string.h>
 #include "parser.h"
 #include <vector>
-#include <string>
 
 using namespace std;
 
@@ -104,6 +103,9 @@ vector<pair< string, doc_node> > parse (char * index_file, char * data_file )
     gzclose (file);
     return res;
 }
+
+
+
 
 int main() {
     return 0;

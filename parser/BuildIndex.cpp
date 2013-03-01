@@ -176,6 +176,23 @@ bool save_lexicon_file(string lex_file_name) {
 	return true;
 }
 
+void test_word() {
+	string input( "word\nH\napple\nC\ndota\nD\ndota\nR\n" );
+	add_word_budget(input, 0);
+	string input2( "word\nH\ndota\nD\ndota\nR\nMS\nC\n" );
+	add_word_budget(input2, 1);
+	// while(cin>>input) {
+	// 	vector<pair<int, int> > temp = find_word_id(input);
+	// 	see(temp.size());
+	// 	for(int i = 0; i < temp.size(); ++i) {see(temp[i].first); see(temp[i].second);}
+	// }
+	save_index_file_split_range("1.txt", 2, 4);puts("");
+	vector<int> temp(2); temp[0] = 0; temp[1] = 1;
+	save_index_file_split_vector("2.txt", temp);
+	save_lexicon_file("lexicon_file.txt");
+	puts("");
+}
+
 /*****************************************************************************/
 //doc file
 
@@ -227,28 +244,20 @@ bool save_doc_file(string filename) {
 	return true;
 }
 
-/*****************************************************************************/
-
-
-int main() {
-	string input( "word\nH\napple\nC\ndota\nD\ndota\nR\n" );
-	add_word_budget(input, 0);
-	string input2( "word\nH\ndota\nD\ndota\nR\nMS\nC\n" );
-	add_word_budget(input2, 1);
-	// while(cin>>input) {
-	// 	vector<pair<int, int> > temp = find_word_id(input);
-	// 	see(temp.size());
-	// 	for(int i = 0; i < temp.size(); ++i) {see(temp[i].first); see(temp[i].second);}
-	// }
-	save_index_file_split_range("1.txt", 2, 4);puts("");
-	vector<int> temp(2); temp[0] = 0; temp[1] = 1;
-	save_index_file_split_vector("2.txt", temp);
-	save_lexicon_file("lexicon_file.txt");
-	puts("");
+void test_doc() {
 	add_doc("baidu1.com", 101, 21);
 	add_doc("baidu2.com", 102, 22);
 	add_doc("baidu3.com", 103, 23);
 	add_doc("baidu4.com", 104, 24);
 	save_doc_file("dic_struc.txt");
+	puts("");
+}
 
+
+/*****************************************************************************/
+
+
+int main() {
+	
+	return 0;
 }
