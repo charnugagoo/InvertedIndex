@@ -355,9 +355,10 @@ vector<pair<string, string> > generate_file_name(string path = "/Users/charnugag
 
 
 int main() {
-	vector<pair<string, string> > data_file;
+	vector<pair<string, string> > data_file = generate_file_name();
 	for(int i = 0, l = data_file.size(); i < l; ++i) {
-		parse(data_file[i].first, data_file[i].second);
+		vector<pair< string, doc_node> > url_doc_pair = parse(data_file[i].first, data_file[i].second);
+		
 	}
 	return 0;
 }
