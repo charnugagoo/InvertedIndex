@@ -8,6 +8,11 @@
 #include <istream>
 #include <map>
 #include <dirent.h>
+#include <zlib.h>
+#include <errno.h>
+#include "parser.h"
+
+
 
 // #if defined __GNUC__ || defined __APPLE__
 // #include <ext/hash_map>
@@ -254,6 +259,63 @@ void test_doc() {
 	puts("");
 }
 
+/*****************************************************************************/
+//parse
+
+#define LENGTH 1000
+const int max_file_name = 100;
+
+vector<pair< string, doc_node> > parse (string index_file, string data_file )
+{
+    vector<pair<string, doc_node> >res;
+    gzFile file;
+    file = gzopen (index_file.data(), "r");
+    if (! file) {
+        fprintf (stderr, "gzopen of '%s' failed: %s.\n", index_file.data(),
+                 strerror (errno));
+        return res;
+    }
+    gzFile file_data;
+    file_data = gzopen (data_file.data(), "r");
+    if (! file_data) {
+        fprintf (stderr, "gzopen of '%s' failed: %s.\n", data_file.data(),
+                 strerror (errno));
+        return res;
+    }
+    while (1) {
+        char buffer[LENGTH];
+        
+        if(0==gzgets(file, buffer, LENGTH)) {
+            break;
+        }
+        char url [20], s1[20], s2[20];
+        int length = 0;
+        int i, j, m;
+        printf ("%s", buffer);
+        
+        sscanf(buffer, "%s %d %d %d %s %d %s", url, &i, &j, &length, s1, &m, s2);
+        char data_buffer[length];
+        gzread(file_data, data_buffer, length);
+        
+        printf ("%s\n", data_buffer);
+        char *pool;
+        int ret;
+        
+        pool = (char*)malloc(2*length+1);
+        
+        // parsing page
+        ret = parser(url, data_buffer, pool, 2*length+1);
+        
+        // output words and their contexts
+        if (ret > 0)
+            printf("%s", pool);
+            
+        free(pool);
+        res.push_back(   make_pair( string(pool) , doc_node(url, length, -1 ) ) );
+    }
+    gzclose (file);
+    return res;
+}
 
 /*****************************************************************************/
 
@@ -293,6 +355,9 @@ vector<pair<string, string> > generate_file_name(string path = "/Users/charnugag
 
 
 int main() {
-	
+	vector<pair<string, string> > data_file;
+	for(int i = 0, l = data_file.size(); i < l; ++i) {
+		parse(data_file[i].first, data_file[i].second);
+	}
 	return 0;
 }

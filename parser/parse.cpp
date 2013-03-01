@@ -38,20 +38,20 @@ struct doc_node {
 
 const int max_file_name = 100;
 
-vector<pair< string, doc_node> > parse (char * index_file, char * data_file )
+vector<pair< string, doc_node> > parse (string index_file, string data_file )
 {
     vector<pair<string, doc_node> >res;
     gzFile file;
-    file = gzopen (index_file, "r");
+    file = gzopen (index_file.data(), "r");
     if (! file) {
-        fprintf (stderr, "gzopen of '%s' failed: %s.\n", index_file,
+        fprintf (stderr, "gzopen of '%s' failed: %s.\n", index_file.data(),
                  strerror (errno));
         return res;
     }
     gzFile file_data;
-    file_data = gzopen (data_file, "r");
+    file_data = gzopen (data_file.data(), "r");
     if (! file_data) {
-        fprintf (stderr, "gzopen of '%s' failed: %s.\n", data_file,
+        fprintf (stderr, "gzopen of '%s' failed: %s.\n", data_file.data(),
                  strerror (errno));
         return res;
     }
@@ -64,7 +64,6 @@ vector<pair< string, doc_node> > parse (char * index_file, char * data_file )
         char url [20], s1[20], s2[20];
         int length = 0;
         int i, j, m;
-//        puts("-----");
         printf ("%s", buffer);
         
         sscanf(buffer, "%s %d %d %d %s %d %s", url, &i, &j, &length, s1, &m, s2);
