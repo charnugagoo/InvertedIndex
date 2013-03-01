@@ -5,6 +5,7 @@
 #include <string.h>
 #include "parser.h"
 #include <vector>
+#include <string>
 
 using namespace std;
 
