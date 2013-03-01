@@ -277,7 +277,12 @@ vector<pair<string, string> > generate_file_name(string path = "/Users/charnugag
 		int start = 0, int end = 54) {
 	vector<pair<string, string> > res;
 	for(int i = start; i < end; ++i) {
-		string temp(i);
+		string temp;
+
+		std::stringstream out;
+		out << i;
+		temp = out.str();
+
 		string a = path + temp + "_index";
 		string b = path + temp + "_data";
 		res.push_back(  make_pair(a, b) );
@@ -285,7 +290,9 @@ vector<pair<string, string> > generate_file_name(string path = "/Users/charnugag
 	return res;
 }
 
+
+
 int main() {
-	all_files_in_folder();
+	
 	return 0;
 }
