@@ -7,6 +7,7 @@
 #include <sstream>
 #include <istream>
 #include <map>
+#include <dirent.h>
 
 // #if defined __GNUC__ || defined __APPLE__
 // #include <ext/hash_map>
@@ -256,8 +257,35 @@ void test_doc() {
 
 /*****************************************************************************/
 
+//main
+
+/*
+vector<string> all_files_in_folder(string path = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/WSE-data") {
+	vector<string> res;
+	DIR * dir = opendir(path.data());
+	if(dir == NULL) return res;
+	struct dirent *ent;
+	while ((ent = readdir (dir)) != NULL) {
+    	printf ("%s\n", ent->d_name);
+    	res.push_back(string(ent->d_name));
+  	}
+	closedir (dir);
+}
+*/
+
+vector<pair<string, string> > generate_file_name(string path = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/WSE-data", 
+		int start = 0, int end = 54) {
+	vector<pair<string, string> > res;
+	for(int i = start; i < end; ++i) {
+		string temp(i);
+		string a = path + temp + "_index";
+		string b = path + temp + "_data";
+		res.push_back(  make_pair(a, b) );
+	}
+	return res;
+}
 
 int main() {
-	
+	all_files_in_folder();
 	return 0;
 }
