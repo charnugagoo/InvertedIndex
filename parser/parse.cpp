@@ -55,30 +55,16 @@ vector<pair< string, doc_node> > parse (char * index_file, char * data_file )
         return res;
     }
     while (1) {
-        int err;
-        int bytes_read;
         char buffer[LENGTH];
         
-        bytes_read = gzgets(file, buffer, LENGTH);
+        if(0==gzgets(file, buffer, LENGTH)) {
+            break;
+        }
         char url [20], s1[20], s2[20];
         int length = 0;
         int i, j, m;
 //        puts("-----");
         printf ("%s", buffer);
-        if (bytes_read < LENGTH - 1) {
-            if (gzeof (file)) {
-                break;
-            }
-            else {
-                const char * error_string;
-                error_string = gzerror (file, & err);
-                if (err) {
-                    fprintf (stderr, "Error: %s.\n", error_string);
-                    continue;
-                    exit (EXIT_FAILURE);
-                }
-            }
-        }
         
         sscanf(buffer, "%s %d %d %d %s %d %s", url, &i, &j, &length, s1, &m, s2);
         char data_buffer[length];

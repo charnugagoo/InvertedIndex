@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8D4D150216DEDC9400CDD51E /* parser.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8D4D150116DEDC9400CDD51E /* parser.1 */; };
-		8D4D152416DEEFD700CDD51E /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 8D4D152316DEEFD700CDD51E /* parser.c */; };
+		8D4D152416DEEFD700CDD51E /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D4D152316DEEFD700CDD51E /* parser.cpp */; };
 		8DDFECE116E11D410041AF4E /* parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8DDFECE016E11D410041AF4E /* parse.cpp */; };
 /* End PBXBuildFile section */
 
@@ -33,7 +33,7 @@
 		8D4D150F16DEDCCD00CDD51E /* parser-revised-readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "parser-revised-readme.txt"; sourceTree = "<group>"; };
 		8D4D151116DEDCCD00CDD51E /* readme2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme2.txt; sourceTree = "<group>"; };
 		8D4D151216DEDCCD00CDD51E /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
-		8D4D152316DEEFD700CDD51E /* parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = parser.c; sourceTree = "<group>"; };
+		8D4D152316DEEFD700CDD51E /* parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
 		8D4D152516DEF02E00CDD51E /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
 		8DDFECE016E11D410041AF4E /* parse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parse.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,7 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				8D4D152516DEF02E00CDD51E /* parser.h */,
-				8D4D152316DEEFD700CDD51E /* parser.c */,
+				8D4D152316DEEFD700CDD51E /* parser.cpp */,
 				8D4D150D16DEDCCD00CDD51E /* sample.html */,
 				8D4D150E16DEDCCD00CDD51E /* parser-revised-again-readme.txt */,
 				8D4D150F16DEDCCD00CDD51E /* parser-revised-readme.txt */,
@@ -132,7 +132,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D4D152416DEEFD700CDD51E /* parser.c in Sources */,
+				8D4D152416DEEFD700CDD51E /* parser.cpp in Sources */,
 				8DDFECE116E11D410041AF4E /* parse.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale>
 
 #define PTAG_B	1
 #define PTAG_I	2
@@ -58,7 +59,7 @@ int tag_parser(char* tag, int len, char* back_tag)
 	case 'B':
 	case 'i':
 	case 'I':
-		if (!isspace(tag[i+1]))
+		if (!isascii(tag[i+1]))
 			return 0;
 		if ((tag[i] == 'b') || (tag[i] == 'B'))
 			return PTAG_B;
@@ -67,30 +68,30 @@ int tag_parser(char* tag, int len, char* back_tag)
 	case 'e':
 	case 'E':
 		i++;
-		if (((tag[i]=='m')||(tag[i]=='M')) && (isspace(tag[i+1])))
+		if (((tag[i]=='m')||(tag[i]=='M')) && (isascii(tag[i+1])))
 			return PTAG_I;
 		return 0;
 	
 	case 'h':
 	case 'H':
 		i++;
-		if (((tag[i]>='1')&&(tag[i]<='6')) && (isspace(tag[i+1])))
+		if (((tag[i]>='1')&&(tag[i]<='6')) && (isascii(tag[i+1])))
 			return PTAG_H;
 		return 0;
 	
 	case 't':
 	case 'T':
 		i++;
-		if ((0==strncasecmp(tag+i, "itle", 4)) && (isspace(tag[i+4])))
+		if ((0==strncasecmp(tag+i, "itle", 4)) && (isascii(tag[i+4])))
 			return PTAG_TITLE;
 		return 0;
 	
 	case 's':
 	case 'S':
 		i++;
-		if ((0==strncasecmp(tag+i, "trong", 5)) && (isspace(tag[i+5])))
+		if ((0==strncasecmp(tag+i, "trong", 5)) && (isascii(tag[i+5])))
 			return PTAG_B;
-		if ((0==strncasecmp(tag+i, "cript", 5)) && (isspace(tag[i+5])))
+		if ((0==strncasecmp(tag+i, "cript", 5)) && (isascii(tag[i+5])))
 			return PTAG_SCRIPT;
 		return 0;
 
