@@ -189,8 +189,8 @@ struct doc_node {
 	}
 	doc_node(string a, int b, int c) {
 		url = a;
-		PR = b;
-		size = c;
+		PR = c;
+		size = b;
 	}
 	void display() {
 		printf("%s %d %d\n", url.data(), size, PR);
