@@ -382,8 +382,14 @@ int main() {
 	return 0;
 }
 
-void compress_one_file(char *infilename, char *outfilename){
+// Compress a file.
+// @param infilename input file name
+// @param outfilename output file name
+void compress_one_file(const char *infilename, const char *outfilename){
     FILE *infile = fopen(infilename, "rb");
+    if (infile == NULL) {
+        return;
+    }
     gzFile outfile = gzopen(outfilename, "wb");
     if (!infile || !outfile) return;
     char inbuffer[128];
@@ -393,4 +399,22 @@ void compress_one_file(char *infilename, char *outfilename){
     }
     fclose(infile);
     gzclose(outfile);
+}
+
+void compress_all_files() {
+    string path = "";
+    for (int i = 0; i < 90; i++) {
+        string temp;
+        
+		std::stringstream out;
+		out << i;
+		temp = out.str();
+        
+		string a = path + temp + "d.txt";
+		string b = path + temp + "f.txt";
+        string c = path + temp + "d.gz";
+		string d = path + temp + "f.gz";
+        compress_one_file(a.c_str(), c.c_str());
+        compress_one_file(b.c_str(), d.c_str());
+    }
 }
