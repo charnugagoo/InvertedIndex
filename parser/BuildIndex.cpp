@@ -262,11 +262,20 @@ void test_doc() {
 /*****************************************************************************/
 /* HTML Parsing
  
-Load one compressed file into memory and then call library functions to uncompress it into another memory-based buffer.
-Find out where each page starts and ends.
-Determine the boundaries of the page in the file by looking at the page lengths in the corresponding _index file.
-Parse only text in that range, and then parse the next page.
+ Load one compressed file into memory and then call library functions to uncompress it into another memory-based buffer.
+ Find out where each page starts and ends.
+ Determine the boundaries of the page in the file by looking at the page lengths in the corresponding _index file.
+ Parse only text in that range, and then parse the next page.
+ 
+ There may be pages with return codes 404 or 304 etc.
+ No need to parse such pages!
+ Detect and skip these various cases.
+ 
+ Compress and uncompress gzipped files in C/C++ using the zlib library.
+ zlib provides a set of gzip File I/O functions for reading and writing gzip files.
 */
+
+// The maximum length of the buffer to read one line.
 #define LENGTH 1000
 const int max_file_name = 100;
 
@@ -274,6 +283,7 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
 {
     vector<pair<string, doc_node> >res;
     gzFile file;
+    // Opens a gzip (.gz) file for reading or writing.
     file = gzopen (index_file.data(), "rb");
     if (! file) {
         fprintf (stderr, "gzopen of '%s' failed: %s.\n", index_file.data(),
@@ -281,6 +291,7 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
         return res;
     }
     gzFile file_data;
+    // Opens a gzip (.gz) file for reading or writing.
     file_data = gzopen (data_file.data(), "r");
     if (! file_data) {
         fprintf (stderr, "gzopen of '%s' failed: %s.\n", data_file.data(),
@@ -290,6 +301,7 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
     while (1) {
         char buffer[LENGTH];
         
+        //Reads bytes from the compressed file until LENGTH-1 characters are read, or a newline character is read and transferred to buf, or an end-of-file condition is encountered.
         if(0==gzgets(file, buffer, LENGTH)) {
             break;
         }
@@ -299,7 +311,9 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
         printf ("%s", buffer);
         
         sscanf(buffer, "%s %d %d %d %s %d %s", url, &i, &j, &length, s1, &m, s2);
+        // The buffer of page data.
         char data_buffer[length];
+        // Reads the given number of uncompressed bytes from the compressed file.
         gzread(file_data, data_buffer, length);
         
         printf ("%s\n", data_buffer);
