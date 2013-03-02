@@ -382,7 +382,41 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
 }
 
 /*****************************************************************************/
+//compress
 
+void compress_one_file(const char *infilename, const char *outfilename){
+    FILE *infile = fopen(infilename, "rb");
+    if (infile == NULL) {
+        return;
+    }
+    gzFile outfile = gzopen(outfilename, "wb");
+    if (!infile || !outfile) return;
+    char inbuffer[128];
+    int num_read = 0;
+    while ((num_read = fread(inbuffer, 1, sizeof(inbuffer), infile)) > 0) {
+        gzwrite(outfile, inbuffer, num_read);
+    }
+    fclose(infile);
+    gzclose(outfile);
+}
+
+void compress_all_files(string path) {
+    for (int i = 0; i < 90; i++) {
+        string temp;
+        
+		std::stringstream out;
+		out << i;
+		temp = out.str();
+        
+		string a = path + temp + "d.txt";
+		string b = path + temp + "f.txt";
+        string c = path + temp + "d.gz";
+		string d = path + temp + "f.gz";
+        compress_one_file(a.c_str(), c.c_str());
+        compress_one_file(b.c_str(), d.c_str());
+    }
+}
+/*****************************************************************************/
 //main
 
 /*
@@ -417,8 +451,13 @@ vector<pair<string, string> > generate_file_name(
 	return res;
 }
 
+//compress
+
+
+
 
 const int inverted_index_split_number = 2000000;
+const string inverted_index_file_name = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/parser/InvertedIndex/";
 
 int main() {
 	vector<pair<string, string> > data_file = generate_file_name();
@@ -433,7 +472,6 @@ int main() {
     	}
         printf("Reading Data File %d ...\n", i);
 	}
-    string inverted_index_file_name = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/parser/InvertedIndex/";
     for(int i = 0, j = 0,
         l = word_set.size(); i < l; ++j) {
 
@@ -454,20 +492,7 @@ int main() {
     see(word_set.size());
     
     //compress
-    
+    compress_all_files(inverted_index_file_name);
 	return 0;
 }
 
-/*
-void compress_one_file(char *infilename, char *outfilename){
-    FILE *infile = fopen(infilename, "rb");
-    gzFile outfile = gzopen(outfilename, "wb");
-    if (!infile || !outfile) return;
-    char inbuffer[128];
-    int num_read = 0;
-    while ((num_read = fread(inbuffer, 1, sizeof(inbuffer), infile)) > 0) {
-        gzwrite(outfile, inbuffer, num_read);
-    }
-    fclose(infile);
-    gzclose(outfile);
-}*/
