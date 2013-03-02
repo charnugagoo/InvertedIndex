@@ -1,2 +1,0 @@
-total processed data: 866684658 bytes!
-total time cost: 3761429279 seconds!

@@ -120,7 +120,6 @@ int parser(char* url, char* doc, char* buf, int blen)
 	pbuf = buf;
 
 /* parsing URL */
-    /*
 	purl = url;
 	while (*purl != '\0')
 	{
@@ -148,7 +147,6 @@ int parser(char* url, char* doc, char* buf, int blen)
 
 		*purl = ch;
 	}
-     */
 
 /* parsing page */
 	tag_flag = 0;
