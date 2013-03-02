@@ -269,7 +269,7 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
 {
     vector<pair<string, doc_node> >res;
     gzFile file;
-    file = gzopen (index_file.data(), "r");
+    file = gzopen (index_file.data(), "rb");
     if (! file) {
         fprintf (stderr, "gzopen of '%s' failed: %s.\n", index_file.data(),
                  strerror (errno));
@@ -361,4 +361,17 @@ int main() {
 		
 	}
 	return 0;
+}
+
+void compress_one_file(char *infilename, char *outfilename){
+    FILE *infile = fopen(infilename, "rb");
+    gzFile outfile = gzopen(outfilename, "wb");
+    if (!infile || !outfile) return;
+    char inbuffer[128];
+    int num_read = 0;
+    while ((num_read = fread(inbuffer, 1, sizeof(inbuffer), infile)) > 0) {
+        gzwrite(outfile, inbuffer, num_read);
+    }
+    fclose(infile);
+    gzclose(outfile);
 }
