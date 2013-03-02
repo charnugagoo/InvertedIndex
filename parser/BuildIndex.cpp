@@ -260,8 +260,13 @@ void test_doc() {
 }
 
 /*****************************************************************************/
-//parse
-
+/* HTML Parsing
+ 
+Load one compressed file into memory and then call library functions to uncompress it into another memory-based buffer.
+Find out where each page starts and ends.
+Determine the boundaries of the page in the file by looking at the page lengths in the corresponding _index file.
+Parse only text in that range, and then parse the next page.
+*/
 #define LENGTH 1000
 const int max_file_name = 100;
 

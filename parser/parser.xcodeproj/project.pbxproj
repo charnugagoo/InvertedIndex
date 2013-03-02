@@ -28,13 +28,10 @@
 /* Begin PBXFileReference section */
 		8D4D14FC16DEDC9400CDD51E /* parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = parser; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D4D150116DEDC9400CDD51E /* parser.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = parser.1; sourceTree = "<group>"; };
-		8D4D150D16DEDCCD00CDD51E /* sample.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = sample.html; sourceTree = "<group>"; };
-		8D4D150E16DEDCCD00CDD51E /* parser-revised-again-readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "parser-revised-again-readme.txt"; sourceTree = "<group>"; };
-		8D4D150F16DEDCCD00CDD51E /* parser-revised-readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "parser-revised-readme.txt"; sourceTree = "<group>"; };
-		8D4D151116DEDCCD00CDD51E /* readme2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme2.txt; sourceTree = "<group>"; };
 		8D4D151216DEDCCD00CDD51E /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		8D4D152316DEEFD700CDD51E /* parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
 		8D4D152516DEF02E00CDD51E /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
+		8D9DE39216E26C45008F238E /* readme2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme2.txt; sourceTree = "<group>"; };
 		8DDFEEE916E160310041AF4E /* BuildIndex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BuildIndex.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,12 +66,9 @@
 		8D4D14FE16DEDC9400CDD51E /* parser */ = {
 			isa = PBXGroup;
 			children = (
+				8D9DE39216E26C45008F238E /* readme2.txt */,
 				8D4D152516DEF02E00CDD51E /* parser.h */,
 				8D4D152316DEEFD700CDD51E /* parser.cpp */,
-				8D4D150D16DEDCCD00CDD51E /* sample.html */,
-				8D4D150E16DEDCCD00CDD51E /* parser-revised-again-readme.txt */,
-				8D4D150F16DEDCCD00CDD51E /* parser-revised-readme.txt */,
-				8D4D151116DEDCCD00CDD51E /* readme2.txt */,
 				8D4D151216DEDCCD00CDD51E /* readme.txt */,
 				8D4D150116DEDC9400CDD51E /* parser.1 */,
 			);
