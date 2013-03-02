@@ -452,6 +452,9 @@ int main() {
     save_doc_file();puts("Saving Doc Meta Data...");
     save_lexicon_file();puts("Saving Lexicon Meta Data...");
     see(word_set.size());
+    
+    //compress
+    
 	return 0;
 }
 
