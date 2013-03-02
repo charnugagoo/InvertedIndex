@@ -33,25 +33,29 @@ const int max_file_name_size = 100;
 
 map < string, int> word_set; // word id list
 vector<vector<pair<int, int> > > word_doc_cnt; // word -> vector<  <docID, cnt>, <docID, cnt>, <docID, cnt>, ...   >
+vector<int> word_doc_cnt_total;
+
 
 struct lexicon_node {
-	int start, length; // [start, end)
+	int start, length, total; // [start, end)
 	string file_name;
 	lexicon_node() {
 		file_name = "";
 		start = -1;
 		length = -1;
+		total = -1;
 	}
-	lexicon_node(string a, int b, int c) {
+	lexicon_node(string a, int b, int c, int d) {
 		file_name = a;
 		start = b;
 		length = c;
+		total = d;
 	}
 	void display() {
-		printf("%s %d %d\n", file_name.data(), start, length);
+		printf("%s %d %d %d\n", file_name.data(), start, length, total);
 	}
 	void f_display(FILE* fw) {
-		fprintf(fw, "%s %d %d\n", file_name.data(), start, length);
+		fprintf(fw, "%s %d %d %d\n", file_name.data(), start, length, total);
 	}
 };
 
@@ -59,6 +63,8 @@ bool is_lexicon_resized = false;
 vector< lexicon_node > lexicon_list;
 
 void add_word( string input_word, int docID) {
+//	see(input_word);see(docID);
+	
 	if(!input_word.length()) return;
 	map < string, int >::iterator idx;
 	idx = word_set.find(input_word);
@@ -68,14 +74,17 @@ void add_word( string input_word, int docID) {
 		vector<pair<int, int> > temp;
 		temp.push_back( make_pair( docID, 1) );
 		word_doc_cnt.push_back(temp);
+		word_doc_cnt_total.push_back(1);
 	} else {
 		int id = (*idx).second;
 		//in word_doc_cnt[id]
 		if(word_doc_cnt[id].size() == 0 || word_doc_cnt[id].back().first != docID) { 
 		// assume insert all words in one doc at the same time
 			word_doc_cnt[id].push_back(make_pair(docID, 1));
+			++word_doc_cnt_total[id];
 		} else {
 			++word_doc_cnt[id].back().second;
+			++word_doc_cnt_total[id];
 		}
 	}
 
@@ -114,7 +123,7 @@ void init_lexicon() {
 bool save_index_file_split_vector(string filename, vector<int> idx) {
 	if(!is_lexicon_resized)
 		init_lexicon();//add lexicon process in this function
-	string f1 = "d" + filename, f2 = "f" + filename;
+	string f1 = filename + "d.txt", f2 = filename + "f.txt";
 	FILE* fw1 = fopen(f1.data(), "w");
 	FILE* fw2 = fopen(f2.data(), "w");
 	if(fw1 == NULL || fw2 == NULL) return false;
@@ -122,8 +131,7 @@ bool save_index_file_split_vector(string filename, vector<int> idx) {
 	int pos = 0, l = word_doc_cnt.size();
 	for(int j = 0, sz = idx.size() ; j < sz; ++j) {
 		int i = idx[j];
-		if(i < 0 || i >= l) { puts("pointer out of memory error 1!"); continue;}
-
+		if(i < 0 || i >= l) { continue;}
 
 		int ll = word_doc_cnt[i].size();
 
@@ -133,28 +141,75 @@ bool save_index_file_split_vector(string filename, vector<int> idx) {
 		lexicon_list[i].file_name = filename;
 		lexicon_list[i].start = st;
 		lexicon_list[i].length = ll;
-		// see(i);see(st);see(ll);
+		lexicon_list[i].total = word_doc_cnt_total[i];
+//		see(i);see(st);see(ll);
 		
 		//write in file
-		// fprintf(fw, "%d %d ", i, ll);
-		printf("%d %d ", i, ll);
+		// fprintf(fw1, "%d %d ", i, ll);
+		// fprintf(fw2, "%d %d ", i, ll);
+		// printf("%d %d ", i, ll);
 		for(int j = 0; j < ll; ++j) {
 			fprintf(fw1, "%d ", word_doc_cnt[i][j].first);
 			fprintf(fw2, "%d ", word_doc_cnt[i][j].second);
-			printf("%d %d ", word_doc_cnt[i][j].first, word_doc_cnt[i][j].second);
+//			printf("%d %d ", word_doc_cnt[i][j].first, word_doc_cnt[i][j].second);
 		}
 		fprintf(fw1, "\n");
 		fprintf(fw2, "\n");
-		puts("");
+//		puts("");
 	}
 	fclose(fw1);
 	fclose(fw2);
 	return true;
 }
 
+bool save_index_file_split_by_size(string filename, int start, int &end, int max_numbers) {
+	if(!is_lexicon_resized)
+		init_lexicon();//add lexicon process in this function
+	string f1 = filename + "d.txt", f2 = filename + "f.txt";
+	FILE* fw1 = fopen(f1.data(), "w");
+	FILE* fw2 = fopen(f2.data(), "w");
+	if(fw1 == NULL || fw2 == NULL) return false;
+
+	int pos = 0, l = word_doc_cnt.size(), i, file_numbers = 0;;
+	for(i = max(start, 0) ; i < l; ++i) {
+
+		int ll = word_doc_cnt[i].size();
+
+		//lexicon
+		int st = pos;
+		pos += ll;
+		lexicon_list[i].file_name = filename;
+		lexicon_list[i].start = st;
+		lexicon_list[i].length = ll;
+		lexicon_list[i].total = word_doc_cnt_total[i];
+		file_numbers += ll;
+		if(file_numbers > max_numbers)
+			break;
+//		see(i);see(st);see(ll);
+		
+		//write in file
+		// fprintf(fw1, "%d %d ", i, ll);
+		// fprintf(fw2, "%d %d ", i, ll);
+		// printf("%d %d ", i, ll);
+		for(int j = 0; j < ll; ++j) {
+			fprintf(fw1, "%d ", word_doc_cnt[i][j].first);
+			fprintf(fw2, "%d ", word_doc_cnt[i][j].second);
+//			printf("%d %d ", word_doc_cnt[i][j].first, word_doc_cnt[i][j].second);
+		}
+		fprintf(fw1, "\n");
+		fprintf(fw2, "\n");
+//		puts("");
+	}
+	fclose(fw1);
+	fclose(fw2);
+	end = i;
+	return true;
+}
+
+
 
 bool save_index_file_split_range(string filename, int start, int end) {
-	vector<int> t(end - start);
+    vector<int> t(end - start);
 	for(int i = 0; i < end - start; ++i) t[i] = i + start;
 	return save_index_file_split_vector(filename, t);
 }
@@ -164,18 +219,20 @@ lexicon_node find_lexicon_by_word(string word) {
 	return lexicon_list[word_set[word]];
 }
 
-bool save_lexicon_file(string lex_file_name) {
+bool save_lexicon_file(
+	string lex_file_name = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/parser/LexiconMetaData.txt") {
 	if(is_lexicon_resized == false) return false;
 	FILE* fw = fopen(lex_file_name.data(), "w");
 	if(fw == NULL) return false;
 
 	fprintf(fw, "%d\n", (int)word_set.size());
-	see(word_set.size());
+	// see(word_set.size());
 	for(map<string, int>::iterator it = word_set.begin(); it != word_set.end(); ++it) {
 		// see(lexicon_list[it->second].start);see(lexicon_list[it->second].length);
-		fprintf(fw, "%s %d %s %d %d\n", 
+		fprintf(fw, "%s %d %s %d %d %d\n", 
 			it->first.data(), it->second, 
-				lexicon_list[it->second].file_name.data(), lexicon_list[it->second].start, lexicon_list[it->second].length);
+				lexicon_list[it->second].file_name.data(), 
+				lexicon_list[it->second].total, lexicon_list[it->second].start, lexicon_list[it->second].length);
 	}
 
 	fclose(fw);
@@ -238,15 +295,16 @@ int add_doc( string url, int sz = -1, int PR = -1 ) {
 	}
 }
 
-bool save_doc_file(string filename) {
+bool save_doc_file(string filename = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/parser/DocMetaData.txt") {
 	FILE* fw = fopen(filename.data(), "w");
 	if(fw == NULL) return false;
 	fprintf(fw, "%d\n", (int)doc_list.size());
-	printf("%d\n", (int)doc_list.size());
+	// printf("%d\n", (int)doc_list.size());
 	for(map<string, int>::iterator it = doc_set.begin(); it != doc_set.end(); ++it) {
 		fprintf(fw, "%d %s %d %d\n", it->second, it->first.data(), doc_list[it->second].size, doc_list[it->second].PR);
-		printf("%d %s %d %d\n", it->second, it->first.data(), doc_list[it->second].size, doc_list[it->second].PR);	
+//		printf("%d %s %d %d\n", it->second, it->first.data(), doc_list[it->second].size, doc_list[it->second].PR);	
 	}
+	fclose(fw);
 	return true;
 }
 
@@ -260,22 +318,8 @@ void test_doc() {
 }
 
 /*****************************************************************************/
-/* HTML Parsing
- 
- Load one compressed file into memory and then call library functions to uncompress it into another memory-based buffer.
- Find out where each page starts and ends.
- Determine the boundaries of the page in the file by looking at the page lengths in the corresponding _index file.
- Parse only text in that range, and then parse the next page.
- 
- There may be pages with return codes 404 or 304 etc.
- No need to parse such pages!
- Detect and skip these various cases.
- 
- Compress and uncompress gzipped files in C/C++ using the zlib library.
- zlib provides a set of gzip File I/O functions for reading and writing gzip files.
-*/
+//parse
 
-// The maximum length of the buffer to read one line.
 #define LENGTH 1000
 const int max_file_name = 100;
 
@@ -283,7 +327,6 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
 {
     vector<pair<string, doc_node> >res;
     gzFile file;
-    // Opens a gzip (.gz) file for reading or writing.
     file = gzopen (index_file.data(), "rb");
     if (! file) {
         fprintf (stderr, "gzopen of '%s' failed: %s.\n", index_file.data(),
@@ -291,8 +334,7 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
         return res;
     }
     gzFile file_data;
-    // Opens a gzip (.gz) file for reading or writing.
-    file_data = gzopen (data_file.data(), "rb");
+    file_data = gzopen (data_file.data(), "r");
     if (! file_data) {
         fprintf (stderr, "gzopen of '%s' failed: %s.\n", data_file.data(),
                  strerror (errno));
@@ -301,22 +343,19 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
     while (1) {
         char buffer[LENGTH];
         
-        //Reads bytes from the compressed file until LENGTH-1 characters are read, or a newline character is read and transferred to buf, or an end-of-file condition is encountered.
         if(0==gzgets(file, buffer, LENGTH)) {
             break;
         }
         char url [20], s1[20], s2[20];
         int length = 0;
         int i, j, m;
-        printf ("%s", buffer);
+//        printf ("%s", buffer);
         
         sscanf(buffer, "%s %d %d %d %s %d %s", url, &i, &j, &length, s1, &m, s2);
-        // The buffer of page data.
         char data_buffer[length];
-        // Reads the given number of uncompressed bytes from the compressed file.
         gzread(file_data, data_buffer, length);
         
-        printf ("%s\n", data_buffer);
+//        printf ("%s\n", data_buffer);
         char *pool;
         int ret;
         
@@ -326,13 +365,19 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
         ret = parser(url, data_buffer, pool, 2*length+1);
         
         // output words and their contexts
-        if (ret > 0)
-            printf("%s", pool);
-            
+//        if (ret > 0) printf("%s", pool);
+        int t = 0;
+        for(int x = 0, y = strlen(pool); x < y; ++x) 
+        	if(pool[x] == '\n')
+				++t;
+//        see(pool);see(t);
+        res.push_back(   make_pair( string(pool) , doc_node(url, t, -1 ) ) );
+        	
         free(pool);
-        res.push_back(   make_pair( string(pool) , doc_node(url, length, -1 ) ) );
+        
     }
     gzclose (file);
+    gzclose (file_data);
     return res;
 }
 
@@ -354,12 +399,13 @@ vector<string> all_files_in_folder(string path = "/Users/charnugagoo/Dropbox/Stu
 }
 */
 
-vector<pair<string, string> > generate_file_name(string path = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/WSE-data", 
-		int start = 0, int end = 54) {
+vector<pair<string, string> > generate_file_name(
+	string path = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/WSE-data/", 
+		int start = 0, int end = 83) {
 	vector<pair<string, string> > res;
 	for(int i = start; i < end; ++i) {
+		
 		string temp;
-
 		std::stringstream out;
 		out << i;
 		temp = out.str();
@@ -372,24 +418,46 @@ vector<pair<string, string> > generate_file_name(string path = "/Users/charnugag
 }
 
 
+const int inverted_index_split_number = 2000000;
 
 int main() {
 	vector<pair<string, string> > data_file = generate_file_name();
 	for(int i = 0, l = data_file.size(); i < l; ++i) {
 		vector<pair< string, doc_node> > url_doc_pair = parse(data_file[i].first, data_file[i].second);
-		
+    	for(int j = 0, ll = url_doc_pair.size(); j  < ll; ++j) {
+    		int doc_id = add_doc(url_doc_pair[j].second.url, url_doc_pair[j].second.size, -1);
+			// see(doc_id);
+			
+			add_word_budget( url_doc_pair[j].first, doc_id);
+			
+    	}
+        printf("Reading Data File %d ...\n", i);
 	}
+    string inverted_index_file_name = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/parser/InvertedIndex/";
+    for(int i = 0, j = 0,
+        l = word_set.size(); i < l; ++j) {
+
+    	string temp;
+       	std::stringstream out;
+		out << j;
+		temp = out.str();
+        
+        int end;
+
+        save_index_file_split_by_size(inverted_index_file_name + temp,
+            i, end, inverted_index_split_number);
+        printf("Saving Index File %d from %dth to %dth...\n", j, i, end);
+        i = end;
+	}	
+    save_doc_file();puts("Saving Doc Meta Data...");
+    save_lexicon_file();puts("Saving Lexicon Meta Data...");
+    see(word_set.size());
 	return 0;
 }
 
-// Compress a file.
-// @param infilename input file name
-// @param outfilename output file name
-void compress_one_file(const char *infilename, const char *outfilename){
+/*
+void compress_one_file(char *infilename, char *outfilename){
     FILE *infile = fopen(infilename, "rb");
-    if (infile == NULL) {
-        return;
-    }
     gzFile outfile = gzopen(outfilename, "wb");
     if (!infile || !outfile) return;
     char inbuffer[128];
@@ -399,22 +467,4 @@ void compress_one_file(const char *infilename, const char *outfilename){
     }
     fclose(infile);
     gzclose(outfile);
-}
-
-void compress_all_files() {
-    string path = "";
-    for (int i = 0; i < 90; i++) {
-        string temp;
-        
-		std::stringstream out;
-		out << i;
-		temp = out.str();
-        
-		string a = path + temp + "d.txt";
-		string b = path + temp + "f.txt";
-        string c = path + temp + "d.gz";
-		string d = path + temp + "f.gz";
-        compress_one_file(a.c_str(), c.c_str());
-        compress_one_file(b.c_str(), d.c_str());
-    }
-}
+}*/
