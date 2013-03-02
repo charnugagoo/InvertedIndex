@@ -292,7 +292,7 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
     }
     gzFile file_data;
     // Opens a gzip (.gz) file for reading or writing.
-    file_data = gzopen (data_file.data(), "r");
+    file_data = gzopen (data_file.data(), "rb");
     if (! file_data) {
         fprintf (stderr, "gzopen of '%s' failed: %s.\n", data_file.data(),
                  strerror (errno));
