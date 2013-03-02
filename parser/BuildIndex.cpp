@@ -396,6 +396,7 @@ void compress_one_file(const char *infilename, const char *outfilename){
     while ((num_read = fread(inbuffer, 1, sizeof(inbuffer), infile)) > 0) {
         gzwrite(outfile, inbuffer, num_read);
     }
+    remove(infilename);
     fclose(infile);
     gzclose(outfile);
 }
