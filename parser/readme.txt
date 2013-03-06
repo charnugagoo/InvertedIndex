@@ -50,14 +50,3 @@ HTML Parsing.
 @param index_file string The corresponding _index file.
 @param data_file string The corresponding _data file.
 @return vector<pair<string, doc_node>> Pairs of <words and their contexts, doc_node>.
-
-2. void compress_one_file(const char *infilename, const char *outfilename);
-
-Compress a file.
-@param infilename const char * Input file name.
-@param outfilename const char * Output file name.
-
-3. void compress_all_files(string path);
-
-Compress all the result files.
-@param path string The directory containing the result files.
