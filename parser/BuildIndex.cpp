@@ -165,9 +165,10 @@ bool save_index_file_split_vector(string filename, vector<int> idx) {
 bool save_index_file_split_by_size(string filename, int start, int &end, int max_numbers) {
 	if(!is_lexicon_resized)
 		init_lexicon();//add lexicon process in this function
-	string f1 = filename + "d.txt", f2 = filename + "f.txt";
-	FILE* fw1 = fopen(f1.data(), "w");
-	FILE* fw2 = fopen(f2.data(), "w");
+	string f1 = filename + "d.gz", f2 = filename + "f.gz";
+    // We keep postings in compressed format on disk even during the index building operation.
+	gzFile fw1 = gzopen(f1.data(), "ab");
+	gzFile fw2 = gzopen(f2.data(), "ab");
 	if(fw1 == NULL || fw2 == NULL) return false;
     
 	int pos = 0, l = word_doc_cnt.size(), i, file_numbers = 0;;
@@ -192,16 +193,16 @@ bool save_index_file_split_by_size(string filename, int start, int &end, int max
 		// fprintf(fw2, "%d %d ", i, ll);
 		// printf("%d %d ", i, ll);
 		for(int j = 0; j < ll; ++j) {
-			fprintf(fw1, "%d ", word_doc_cnt[i][j].first);
-			fprintf(fw2, "%d ", word_doc_cnt[i][j].second);
+			gzprintf(fw1, "%d ", word_doc_cnt[i][j].first);
+			gzprintf(fw2, "%d ", word_doc_cnt[i][j].second);
             //			printf("%d %d ", word_doc_cnt[i][j].first, word_doc_cnt[i][j].second);
 		}
-		fprintf(fw1, "\n");
-		fprintf(fw2, "\n");
+		gzprintf(fw1, "\n");
+		gzprintf(fw2, "\n");
         //		puts("");
 	}
-	fclose(fw1);
-	fclose(fw2);
+	gzclose(fw1);
+	gzclose(fw2);
 	end = i;
 	return true;
 }
@@ -220,7 +221,7 @@ lexicon_node find_lexicon_by_word(string word) {
 }
 
 bool save_lexicon_file(
-                       string lex_file_name = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/parser/LexiconMetaData.txt") {
+                       string lex_file_name = "/Users/jiankaidang/Documents/WebSearchEngines/latest/InvertedIndex/parser/LexiconMetaData.txt") {
 	if(is_lexicon_resized == false) return false;
 	FILE* fw = fopen(lex_file_name.data(), "w");
 	if(fw == NULL) return false;
@@ -295,7 +296,7 @@ int add_doc( string url, int sz = -1, int PR = -1 ) {
 	}
 }
 
-bool save_doc_file(string filename = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/parser/DocMetaData.txt") {
+bool save_doc_file(string filename = "/Users/jiankaidang/Documents/WebSearchEngines/latest/InvertedIndex/parser/DocMetaData.txt") {
 	FILE* fw = fopen(filename.data(), "w");
 	if(fw == NULL) return false;
 	fprintf(fw, "%d\n", (int)doc_list.size());
@@ -339,7 +340,7 @@ const int max_file_name = 100;
 
 // @param index_file string The corresponding _index file.
 // @param data_file string The corresponding _data file.
-// @return vector<pair<string, doc_node>> Pairs of <URL, doc_node>.
+// @return vector<pair<string, doc_node>> Pairs of <words and their contexts, doc_node>.
 vector<pair<string, doc_node>> parse (string index_file, string data_file)
 {
     vector<pair<string, doc_node> >res;
@@ -401,49 +402,6 @@ vector<pair<string, doc_node>> parse (string index_file, string data_file)
     gzclose (file_data);
     return res;
 }
-
-/*****************************************************************************/
-// Compress a file.
-// @param infilename const char * Input file name.
-// @param outfilename const char * Output file name.
-
-void compress_one_file(const char *infilename, const char *outfilename){
-    FILE *infile = fopen(infilename, "rb");
-    if (infile == NULL) {
-        return;
-    }
-    gzFile outfile = gzopen(outfilename, "wb");
-    if (!infile || !outfile) return;
-    char inbuffer[128];
-    int num_read = 0;
-    while ((num_read = fread(inbuffer, 1, sizeof(inbuffer), infile)) > 0) {
-        gzwrite(outfile, inbuffer, num_read);
-    }
-    remove(infilename);
-    fclose(infile);
-    gzclose(outfile);
-}
-
-// Compress all the result files.
-// @param path string The directory containing the result files.
-void compress_all_files(string path) {
-    for (int i = 0; i < 90; i++) {
-        string temp;
-        
-        // Convert i into string.
-		std::stringstream out;
-		out << i;
-		temp = out.str();
-        
-		string a = path + temp + "d.txt";
-		string b = path + temp + "f.txt";
-        string c = path + temp + "d.gz";
-		string d = path + temp + "f.gz";
-        compress_one_file(a.c_str(), c.c_str());
-        compress_one_file(b.c_str(), d.c_str());
-    }
-}
-/*****************************************************************************/
 //main
 
 /*
@@ -461,7 +419,7 @@ void compress_all_files(string path) {
  */
 
 vector<pair<string, string> > generate_file_name(
-                                                 string path = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/WSE-data/",
+                                                 string path = "/Users/jiankaidang/Documents/WebSearchEngines/latest/InvertedIndex/WSE-data/",
                                                  int start = 0, int end = 83) {
 	vector<pair<string, string> > res;
 	for(int i = start; i < end; ++i) {
@@ -484,7 +442,7 @@ vector<pair<string, string> > generate_file_name(
 
 
 const int inverted_index_split_number = 2000000;
-const string inverted_index_file_name = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/parser/InvertedIndex/";
+const string inverted_index_file_name = "/Users/jiankaidang/Documents/WebSearchEngines/latest/InvertedIndex/parser/InvertedIndex/";
 
 int main() {
 	vector<pair<string, string> > data_file = generate_file_name();
@@ -517,9 +475,6 @@ int main() {
     save_doc_file();puts("Saving Doc Meta Data...");
     save_lexicon_file();puts("Saving Lexicon Meta Data...");
     see(word_set.size());
-    
-    //compress
-    compress_all_files(inverted_index_file_name);
 	return 0;
 }
 

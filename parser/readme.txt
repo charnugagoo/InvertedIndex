@@ -27,6 +27,7 @@ We uncompress the files during parsing, by loading one compressed file into memo
 Compress and uncompress gzipped files in C++ using the zlib library.
 zlib provides a set of gzip File I/O functions for reading and writing gzip files.
 We store the final inverted lists in compressed form.
+We keep postings in compressed format on disk even during the index building operation.
 
 We assign docIDs in the order in which the pages are parsed.
 The final inverted lists do not have the words or word IDs inside each posting anymore.
@@ -48,7 +49,7 @@ What are the major functions and modules?
 HTML Parsing.
 @param index_file string The corresponding _index file.
 @param data_file string The corresponding _data file.
-@return vector<pair<string, doc_node>> Pairs of <URL, doc_node>.
+@return vector<pair<string, doc_node>> Pairs of <words and their contexts, doc_node>.
 
 2. void compress_one_file(const char *infilename, const char *outfilename);
 
