@@ -333,11 +333,14 @@ void test_doc() {
  zlib provides a set of gzip File I/O functions for reading and writing gzip files.
  */
 
-// The maximum length of the buffer to read one line.
+// The maximum length of the buffer to read for one line.
 #define LENGTH 1000
 const int max_file_name = 100;
 
-vector<pair< string, doc_node> > parse (string index_file, string data_file )
+// @param index_file string The corresponding _index file.
+// @param data_file string The corresponding _data file.
+// @return vector<pair<string, doc_node>> Pairs of <URL, doc_node>.
+vector<pair<string, doc_node>> parse (string index_file, string data_file)
 {
     vector<pair<string, doc_node> >res;
     gzFile file;
@@ -401,8 +404,8 @@ vector<pair< string, doc_node> > parse (string index_file, string data_file )
 
 /*****************************************************************************/
 // Compress a file.
-// @param infilename input file name
-// @param outfilename output file name
+// @param infilename const char * Input file name.
+// @param outfilename const char * Output file name.
 
 void compress_one_file(const char *infilename, const char *outfilename){
     FILE *infile = fopen(infilename, "rb");
@@ -421,6 +424,8 @@ void compress_one_file(const char *infilename, const char *outfilename){
     gzclose(outfile);
 }
 
+// Compress all the result files.
+// @param path string The directory containing the result files.
 void compress_all_files(string path) {
     for (int i = 0; i < 90; i++) {
         string temp;
