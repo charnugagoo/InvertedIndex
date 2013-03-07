@@ -32,9 +32,8 @@ We assign docIDs in the order in which the pages are parsed.
 The final inverted lists do not have the words or word IDs inside each posting anymore.
 
 The data may be larger than the memory size, and thus we use I/O-efficient algorithms for index construction.
-We implement this homework in two components.
-One for generating intermediate indices from the files and writing these indices out in partially sorted form.
-One for merging the indices into the final index and lookup structures.
+We generate intermediate indices from the files and writing these indices out in partially sorted form.
+We merge the indices into the final index and lookup structures.
 We implement our own I/O-efficient merging procedure.
 
 -----------------------------------------
