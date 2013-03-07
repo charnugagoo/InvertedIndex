@@ -32,6 +32,10 @@ We assign docIDs in the order in which the pages are parsed.
 The final inverted lists do not have the words or word IDs inside each posting anymore.
 
 The data may be larger than the memory size, and thus we use I/O-efficient algorithms for index construction.
+We implement this homework in two components.
+One for generating intermediate indices from the files and writing these indices out in partially sorted form.
+One for merging the indices into the final index and lookup structures.
+We implement our own I/O-efficient merging procedure.
 
 -----------------------------------------
 
@@ -94,8 +98,8 @@ About 1 hour and 25 minutes for the full NZ data set.
 How large are the resulting index files?
 
 Inverted Index files are 3.44G in total. 65 files, about 25M per file.
-Lexicon file is 182M.
-docID-to-URL table file is 94M.
+Lexicon file is 370M.
+docID-to-URL table file is 183M.
 
 -----------------------
 
