@@ -8,6 +8,8 @@
 
 #include "Compress.h"
 #include <zlib.h>
+#include <sstream>
+using namespace std;
 // Compress a file.
 // @param infilename input file name
 // @param outfilename output file name
@@ -25,4 +27,18 @@ void compress_one_file(const char *infilename, const char *outfilename){
     }
     fclose(infile);
     gzclose(outfile);
+}
+
+void compress_all_files(string path = "/Users/charnugagoo/Dropbox/Study/WebSearchEngine/InvertedIndex/parser/InvertedIndex/") {
+    for (int i = 0; i < 90; i++) {
+        string temp;
+        
+		std::stringstream out;
+		out << i;
+		temp = out.str();
+        
+		string a = path + temp + ".txt";
+        string c = path + temp + ".gz";
+        compress_one_file(a.c_str(), c.c_str());
+    }
 }
