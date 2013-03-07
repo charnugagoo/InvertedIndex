@@ -2,6 +2,7 @@ What can the program do?
 
 The program creates an inverted index structure, plus structures for the lexicon and for the docID-to-URL table from a set of downloaded web pages.
 At the end of the program, all structures are stored on disk in binary data formats for these structures.
+We store all structures in compressed form.
 The program is able to to deal with data which is provided in a fairly raw form with various errors (truncated web pages, 404 errors).
 
 Our inverted index is structured such that we can read a particular inverted list without reading the rest of the index, by looking up the start of the inverted list in the lexicon structure.
@@ -86,9 +87,15 @@ Search the information of a word.
 
 How long does it take on the provided data set?
 
+About 1 hour and 25 minutes for the full NZ data set.
+
 ----------------------------------------
 
 How large are the resulting index files?
+
+Inverted Index files are 3.44G in total. 65 files, about 25M per file.
+Lexicon file is 182M.
+docID-to-URL table file is 94M.
 
 -----------------------
 
@@ -97,8 +104,8 @@ How to run the program?
 We use Xcode to develop our project.
 To run the program, you could open Xcode project file: "parser.xcodeproj".
 Modify the following variables:
-string lex_file_name: The file path and name of the lexicon file which you want to save.
-string filename: The file path and name of the docID-to-URL table file which you want to save.
-string path: The path and directory name of the data set.
-const string inverted_index_file_name: The inverted index file path and directory name where you want to save inverted index files.
+string lex_file_name: The absolute file path and name of the lexicon file which you want to save.
+string filename: The absolute file path and name of the docID-to-URL table file which you want to save.
+string path: The absolute path and directory name of the data set.
+const string inverted_index_file_name: The inverted index absolute path and directory name where you want to save inverted index files.
 Build and run the program in Xcode.
