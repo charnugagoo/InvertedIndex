@@ -33,9 +33,9 @@ const int max_file_name_size = 100;
 
 map < string, int> word_set; // word id list
 vector<vector<pair<int, int> > > word_doc_cnt; // word -> vector<  <docID, cnt>, <docID, cnt>, <docID, cnt>, ...   >
-vector<int> word_doc_cnt_total;
+vector<int> word_doc_cnt_total; // word frequency in all docs.
 
-
+// lexicon information.
 struct lexicon_node {
 	int start, length, total; // [start, end)
 	string file_name;
@@ -62,6 +62,9 @@ struct lexicon_node {
 bool is_lexicon_resized = false;
 vector< lexicon_node > lexicon_list;
 
+// Add a word information into the lexicon.
+// @param input_word string The word to be added.
+// @param docID int docID of the document in which the word occurs.
 void add_word( string input_word, int docID) {
     //	see(input_word);see(docID);
 	
@@ -91,7 +94,9 @@ void add_word( string input_word, int docID) {
 	return;
 }
 
-
+// Collect the information of all the words in a particular document.
+// @param word_file string The information of all the words in a particular document.
+// @param docID int The docID of that document.
 void add_word_budget( string word_file, int docID) {
 	istringstream str(word_file);
     string sline;
@@ -102,6 +107,9 @@ void add_word_budget( string word_file, int docID) {
     return;
 }
 
+// Search the information of a word.
+// @param input_word string The word whose information to be searched.
+// @return vector<pair<int, int> > word -> vector<  <docID, cnt>, <docID, cnt>, <docID, cnt>, ...   >
 vector<pair<int, int> > find_word_id( string input_word ) {
 	map < string, int >::iterator idx;
 	idx = word_set.find(input_word);
@@ -114,6 +122,7 @@ vector<pair<int, int> > find_word_id( string input_word ) {
 	}
 }
 
+// Init lexicon data structure.
 void init_lexicon() {
 	is_lexicon_resized = true;
 	lexicon_list.clear();
@@ -162,6 +171,12 @@ bool save_index_file_split_vector(string filename, vector<int> idx) {
 	return true;
 }
 
+// Save inverted index files. Limit the size of the files by the number of documents processed.
+// @param filename string File name.
+// @param start int The start position of the information to be processed.
+// @param end int The end position of the information to be processed.
+// @param max_numbers int The maximum number of documents to be processed.
+// @return bool Whether the process is successful.
 bool save_index_file_split_by_size(string filename, int start, int &end, int max_numbers) {
 	if(!is_lexicon_resized)
 		init_lexicon();//add lexicon process in this function
@@ -220,6 +235,9 @@ lexicon_node find_lexicon_by_word(string word) {
 	return lexicon_list[word_set[word]];
 }
 
+// Save lexicon file.
+// @param lex_file_name string The file path and name of the lexicon file.
+// @return bool Whether the process is successful.
 bool save_lexicon_file(
                        string lex_file_name = "/Users/jiankaidang/Documents/WebSearchEngines/latest/InvertedIndex/parser/LexiconMetaData.txt") {
 	if(is_lexicon_resized == false) return false;
@@ -296,6 +314,9 @@ int add_doc( string url, int sz = -1, int PR = -1 ) {
 	}
 }
 
+// Save the docID-to-URL table file.
+// @param filename string The file path and name of the docID-to-URL table file.
+// @return bool Whether the process is successful.
 bool save_doc_file(string filename = "/Users/jiankaidang/Documents/WebSearchEngines/latest/InvertedIndex/parser/DocMetaData.txt") {
 	FILE* fw = fopen(filename.data(), "w");
 	if(fw == NULL) return false;
