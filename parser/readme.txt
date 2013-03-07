@@ -30,6 +30,8 @@ We keep postings in compressed format on disk even during the index building ope
 We assign docIDs in the order in which the pages are parsed.
 The final inverted lists do not have the words or word IDs inside each posting anymore.
 
+The data may be larger than the memory size, and thus we use I/O-efficient algorithms for index construction.
+
 -----------------------------------------
 
 What are the major functions and modules?
@@ -94,4 +96,9 @@ How to run the program?
 
 We use Xcode to develop our project.
 To run the program, you could open Xcode project file: "parser.xcodeproj".
-Then build and run the program in Xcode.
+Modify the following variables:
+string lex_file_name: The file path and name of the lexicon file which you want to save.
+string filename: The file path and name of the docID-to-URL table file which you want to save.
+string path: The path and directory name of the data set.
+const string inverted_index_file_name: The inverted index file path and directory name where you want to save inverted index files.
+Build and run the program in Xcode.
