@@ -2,7 +2,6 @@ What can the program do?
 
 The program creates an inverted index structure, plus structures for the lexicon and for the docID-to-URL table from a set of downloaded web pages.
 At the end of the program, all structures are stored on disk in binary data formats for these structures.
-We store all structures in compressed form.
 The program is able to to deal with data which is provided in a fairly raw form with various errors (truncated web pages, 404 errors).
 
 Our inverted index is structured such that we can read a particular inverted list without reading the rest of the index, by looking up the start of the inverted list in the lexicon structure.
